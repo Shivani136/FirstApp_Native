@@ -12,7 +12,7 @@ import { Text,
   } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { Button, Card } from 'react-native-paper';
-import {  TextInput, IconButton } from "@react-native-material/core";
+import {TextInput, IconButton} from "@react-native-material/core";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import colors from "../config/colors";
 import DatePicker from 'react-native-datepicker';
@@ -68,21 +68,52 @@ export default function Profile({width='90%', navigation}) {
     Alert.alert(phone);
   };
 
+  useEffect(() => {
+    getUser();
+    }, []);
+
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJmdXJuaXR1cmUiLCJpYXQiOjE2NzQ0NzUyNDgsImV4cCI6MTgzMjE1NTI0OH0.VsL3DEtjmZhKUwK83l4i1Q4cOKNBNkbtKTlDwGLOTX4'
+    const getUser = async() => {
+      await axios.get('https://wpfurniture.mangoitsol.com/wp-json/wp/v2/users/5',{
+      headers: {
+      'Content-Type': 'application/json',
+      'Authorization' : `Bearer ${token}`
+   
+      }
+      }).then((response)=>{
+    //console.log(response.data,"successsssssssssssš")
+    setList(response.data,"<<<<<<<<<")
+    setName(response.data.name)
+    setDate(response.data.acf.date)
+    setPhone(response.data.acf.phone)
+       }).catch((error)=>{
+      console.log(error,">>>>>>")
+          })
+          
+          // .then((response) => { setList(response.data)});
+          }
+
 //const handleSubmit = async ({ name,first_name,email,date,phone,gender }) => {
   function Update() {
- //console.log("result")
-  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJmdXJuaXR1cmUiLCJpYXQiOjE2NzQ0NzUyNDgsImV4cCI6MTgzMjE1NTI0OH0.VsL3DEtjmZhKUwK83l4i1Q4cOKNBNkbtKTlDwGLOTX4'
-      let formData = new FormData();
+   //console.log("result")
+   let formData = new FormData();
       let acf = { 
        phone: phone, gender: value, date: date
       } 
       let acfs= {
         acf
       }
-   //   console.log('>>>>>>>>>>@@@@@@@@@@', name, first_name)
-      formData.append({'name': name}); 
-      formData.append({'first_name' : first_name});
-      formData.append({'email' : email});
+      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJmdXJuaXR1cmUiLCJpYXQiOjE2NzQ0NzUyNDgsImV4cCI6MTgzMjE1NTI0OH0.VsL3DEtjmZhKUwK83l4i1Q4cOKNBNkbtKTlDwGLOTX4'
+      // let item = { name,first_name, email, date:acf.date, phone: acf.phone ,gender:value}
+      // //alert(temp.id, "this is id ");
+      // for (var key in item) {
+      //   formData.append(key, item[key])
+      // }
+
+     console.log('>>>>>>>>>>@@@@@@@@@@', name, first_name, email)
+      formData.append('name', name); 
+      formData.append('first_name' ,first_name);
+      formData.append('email' ,email);
       formData.append('date', acf.date);  
       formData.append('phone', acf.phone);   
       formData.append('gender', value);
@@ -92,10 +123,13 @@ export default function Profile({width='90%', navigation}) {
           'Authorization' : `Bearer ${token}` 
           }
       }
-      console.log(formData,"<<<<<<<<")
-     axios.post(`https://wpfurniture.mangoitsol.com/wp-json/wp/v2/users/5`,{formData} ,config)
+     console.log(formData,"<<<<<<<<")
+    
+     axios.post(`https://wpfurniture.mangoitsol.com/wp-json/wp/v2/users/5`,formData ,config)
        .then(response => {
-        console.log(response.data, "??????????");
+        console.log(response.data,"itennmmmmmmmmmmm");
+        //alert("success");
+
           // navigation.navigate("Login")
        })
        .catch(error => {
@@ -114,20 +148,18 @@ export default function Profile({width='90%', navigation}) {
       const onChangeEmailHandler = (email) => {
         setEmail(email);
       };
-      const onChangeGenderHandler = (value) => {
-        setValue(value);
-      };
+      // const onChangeGenderHandler = (value) => {
+      //   setValue(value);
+      // };
     
    return (
      <>
       {/* <KeyboardAwareScrollView> */}
       <SafeAreaView>
-   
-     <View style={{  backgroundColor: colors.white}}>
+    <View style={{  backgroundColor: colors.white}}>
      {/* <Text style={{flex: 1,fontSize:20,padding:10, textAlign: "left", marginLeft: 30,fontWeight: "bold"}}>Fill Your Profile</Text> */}
      <View style={styles.container}>
-
-      <Image source={require("../assets/user.png")} style={{position:'relative'}}/>
+     <Image source={require("../assets/user.png")} style={{position:'relative'}}/>
       <View  style={styles.camera}>
       <Entypo name="edit" size={16} color="white"/>
       </View>
@@ -135,7 +167,7 @@ export default function Profile({width='90%', navigation}) {
 
        <View style={{marginLeft:20}}>
       <AppForm 
-       initialValues={{name: " ", first_name: " " ,date: "",email: " ", phone: "", gender : ""}}
+       //initialValues={{name: " ", first_name: " " ,date: "",email: " ", phone: "", gender : ""}}
        style={[styles.form ,{width}]}
        validationSchema={validationSchema}
       // onSubmit={handleSubmit}
@@ -234,13 +266,11 @@ export default function Profile({width='90%', navigation}) {
      <Text style={styles.buttonText}>Get Phone Number</Text>
       </TouchableOpacity> */}
 
-       
-         
 <View style={{ marginTop:20,marginBottom:15, margin:10}}> 
 <DropDownPicker
  style={{backgroundColor:colors.grayshade}}
-      open={open}
-      value={value}
+       open={open}
+       value={value}
        items={items}
        setOpen={setOpen}
        setValue={setValue}
@@ -258,10 +288,8 @@ export default function Profile({width='90%', navigation}) {
     <AppButton onPress={()=>Update()} title="Update"></AppButton>   
     </View>
      </AppForm>
-     
+     </View>
     </View>
-    </View>
-    
     </SafeAreaView>
     {/* </KeyboardAwareScrollView> */}
     </>
