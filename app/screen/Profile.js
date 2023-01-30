@@ -41,7 +41,7 @@ const validationSchema = Yup.object().shape({
   date: Yup.string().required().label("Date"),
   email: Yup.string().required().email().label("Email"),
   phone: Yup.string().required().min(10).label("Phone"),
-  gender: Yup.string().required().label("Gender"),
+  //gender: Yup.string().required().label("Gender"),
 });
 
 export default function Profile({width='90%', navigation}) {
@@ -68,7 +68,7 @@ export default function Profile({width='90%', navigation}) {
     Alert.alert(phone);
   };
 
-//const handleSubmit = async ({ name,first_name,email,date,phone,value }) => {
+//const handleSubmit = async ({ name,first_name,email,date,phone,gender }) => {
   function Update() {
  //console.log("result")
   const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJmdXJuaXR1cmUiLCJpYXQiOjE2NzQ0NzUyNDgsImV4cCI6MTgzMjE1NTI0OH0.VsL3DEtjmZhKUwK83l4i1Q4cOKNBNkbtKTlDwGLOTX4'
@@ -79,33 +79,45 @@ export default function Profile({width='90%', navigation}) {
       let acfs= {
         acf
       }
-      console.log(acfs,'>>>>>>>>>>@@@@@@@@@@', name)
-      formData.append('name', name); 
-      formData.append('first_name', first_name);
-      formData.append('email', email);
+   //   console.log('>>>>>>>>>>@@@@@@@@@@', name, first_name)
+      formData.append({'name': name}); 
+      formData.append({'first_name' : first_name});
+      formData.append({'email' : email});
       formData.append('date', acf.date);  
       formData.append('phone', acf.phone);   
-      formData.append('gender', acf.value);
+      formData.append('gender', value);
       const config = {     
         headers: {
           'Content-Type': 'application/json',
           'Authorization' : `Bearer ${token}` 
           }
       }
-      console.log(formData,">>>>>>>>>>",name,first_name,email,acf)
-    //  axios.post(`https://wpfurniture.mangoitsol.com/wp-json/wp/v2/users/5`,formData ,config)
-    //    .then(response => {
-    //     console.log(response.data, "??????????");
-    //       // navigation.navigate("Login")
-    //    })
-    //    .catch(error => {
-    //        console.log(error);
-    //    });
+      console.log(formData,"<<<<<<<<")
+     axios.post(`https://wpfurniture.mangoitsol.com/wp-json/wp/v2/users/5`,{formData} ,config)
+       .then(response => {
+        console.log(response.data, "??????????");
+          // navigation.navigate("Login")
+       })
+       .catch(error => {
+        alert("An error has occurred");
+           console.log(error);
+       });
       }
 
-      function handleChange(e){
-        console.log("MMMMM", e.target.name)
-      }
+      
+      const onChangeNameHandler = (name) => {
+        setName(name);
+      };
+      const onChangeFirstNameHandler = (first_name) => {
+        setFirst_name(first_name);
+      };
+      const onChangeEmailHandler = (email) => {
+        setEmail(email);
+      };
+      const onChangeGenderHandler = (value) => {
+        setValue(value);
+      };
+    
    return (
      <>
       {/* <KeyboardAwareScrollView> */}
@@ -123,20 +135,19 @@ export default function Profile({width='90%', navigation}) {
 
        <View style={{marginLeft:20}}>
       <AppForm 
-       initialValues={{name: " ", first_name: " " ,date: "",email: " ", phone: "", value : ""}}
+       initialValues={{name: " ", first_name: " " ,date: "",email: " ", phone: "", gender : ""}}
        style={[styles.form ,{width}]}
        validationSchema={validationSchema}
       // onSubmit={handleSubmit}
-      //onSubmit={Update}
+       onSubmit={Update}
        >
         <AppTextInput 
          autoCapitalize="none"
          autoCorrect={false}
          name="name"
-        // onChange={(e)=>handleChange(e)}
-       //  onChange={(e) => (name = e.target.value)}
-           value={name}
-           onChange={(e) => { setName(e.target.value) }}
+         value={name}
+         onChangeText={onChangeNameHandler}
+         // onChange={(e) => { setName(e.target.value) }}
           placeholder="Andrew Ainsley"
           textContentType="name"
          /> 
@@ -144,8 +155,8 @@ export default function Profile({width='90%', navigation}) {
          autoCapitalize="none"
           autoCorrect={false}
           name="first_name"
-          // value={first_name}
-           onChange={(e) => { setFirst_name(e.target.value) }}
+          value={first_name}
+          onChangeText={onChangeFirstNameHandler}
           placeholder="Andrew"
           textContentType="first_name"
          /> 
@@ -186,8 +197,7 @@ export default function Profile({width='90%', navigation}) {
         }
      }}
     onDateChange={(date) => setDate(date)}
- //onDateChange={(date) => {setDate(date)}}
- />
+  />
 
 </View>
     <TextInput
@@ -198,10 +208,10 @@ export default function Profile({width='90%', navigation}) {
      placeholder="andrew@yourdomain.com"
      textContentType="email"
      keyboardType="email-address"
-    //  value={email}
-    //  onChange={(e) => { setEmail(e.target.value) }}
+     value={email}
+     onChangeText={onChangeEmailHandler}
     trailing={props => (
-       <IconButton icon={props => <Icon name="email" {...props} />} {...props} />
+    <IconButton icon={props => <Icon name="email" {...props} />} {...props} />
      )}
    />
      <PhoneInput
@@ -213,11 +223,10 @@ export default function Profile({width='90%', navigation}) {
         autoFocus
         value={phone}
         placeholder="+1 1111467378399"
-       // onChange={(e) => { setUsername(e.target.value) }}
         containerStyle={styles.phoneNumberView}
         textContainerStyle={{ paddingVertical: 0 }}
         onChangeFormattedText={text => {
-          setPhone(text);
+        setPhone(text);
         }}
       />
 
@@ -229,21 +238,22 @@ export default function Profile({width='90%', navigation}) {
          
 <View style={{ marginTop:20,marginBottom:15, margin:10}}> 
 <DropDownPicker
-style={{backgroundColor:colors.grayshade}}
+ style={{backgroundColor:colors.grayshade}}
       open={open}
       value={value}
        items={items}
        setOpen={setOpen}
        setValue={setValue}
        setItems={setItems}
-     
+      // onSelectChange={onChangeGenderHandler}
      />
     </View>
    <View style={{paddingTop:5,}}>
 
    {/* <SubmitButton
       title="Continues"
-      onPress={() => navigation.navigate("Login")}
+      //onPress={()=>Update()}
+       onPress={() => navigation.navigate("Login")}
       /> */}
     <AppButton onPress={()=>Update()} title="Update"></AppButton>   
     </View>
