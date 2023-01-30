@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import colors from '../config/colors';
+import AppButton from '../component/AppButton';
 
-const Orders = () => {
+const Logout = ({ navigation}) => {
     return (
         <View style={styles.container}>
-            <Text>Orders Screen</Text>
+            {/* <Text>Logout</Text> */}
+            <AppButton 
+            onPress={() => navigation.navigate("Login")}
+            title="Logout"></AppButton>  
         </View>
+       
     );
 };
 const styles = StyleSheet.create({
@@ -14,7 +19,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: colors.white
+        backgroundColor: colors.white,
     },
 });
-export default Orders;
+export default Logout;

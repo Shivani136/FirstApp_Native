@@ -27,7 +27,6 @@ import axios from 'axios';
 const CustomSidebarMenu = (props,{ navigation }) => {
   const [data, setData] = useState();
   const [list, setList] = useState('');
-  // const { user, logOut } = useAuth();
   const { user, setUser } = useContext(AuthContext);
 
   const BASE_PATH =
@@ -51,31 +50,28 @@ const CustomSidebarMenu = (props,{ navigation }) => {
    
       }
       }).then((response)=>{
-//console.log(response.data,"<<<<<<<<<")
-setList(response.data,"<<<<<<<<<")
-      }).catch((error)=>{
-  console.log(error,">>>>>>")
-      })
-       
-      // .then((response) => { setList(response.data)});
-      }
-
-
-  return (
+    //console.log(response.data,"<<<<<<<<<")
+    setList(response.data,"<<<<<<<<<")
+          }).catch((error)=>{
+      console.log(error,">>>>>>")
+          })
+          
+          // .then((response) => { setList(response.data)});
+          }
+ return (
     <SafeAreaView style={{flex: 1}}>
-
-    <View style={styles.container}>
+   <View style={styles.container}>
       <Image source={require("../assets/user.png")} style={{position:'relative'}}/>
       <View  style={styles.camera}>
       <Entypo name="edit" size={16} color="white"/>
       </View>
    
-                <View style={{margin: 10}}>
-                <Text style={{fontSize:24,fontWeight:"bold",paddingBottom:10}}>{list.name}</Text> 
-                <Text style={[styles.number,]}>1234567890</Text> 
-              {/* <Text style={[styles.number,]}>{list.acf.phone}</Text>  */}
-              <View style={styles.divider}></View>
-              </View>
+   <View style={{margin: 10}}>
+     <Text style={{fontSize:24,fontWeight:"bold",paddingBottom:10}}>{list.name}</Text> 
+    <Text style={[styles.number]}>1234567890</Text> 
+    {/* <Text style={[styles.number,]}>{list.acf.phone}</Text>  */}
+   <View style={styles.divider}></View>
+   </View>
                  
     
       </View>
@@ -95,7 +91,7 @@ setList(response.data,"<<<<<<<<<")
 const styles = StyleSheet.create({
   sideMenuProfileIcon: {
     resizeMode: 'cover',
-    width: 200,
+    width: 300,
     height: 40,
     borderRadius: 100 / 2,
     alignSelf: 'center',
@@ -103,7 +99,9 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingTop: 20,
-    marginLeft:70
+    marginLeft:70,
+    // backgroundColor:"red",
+    // width:350
    },
   text: {
     fontSize: 18,
@@ -130,8 +128,7 @@ const styles = StyleSheet.create({
 number:{
   fontSize:14,
   color:colors.black,
-      // borderBottomWidth: 2, 
-      // borderBottomColor:colors.gray
+   
 },
 divider :{
     borderBottomWidth :1,
@@ -143,16 +140,7 @@ divider :{
     paddingRight:5
    // transform:translate(0%, 0%)   
    },
-  // iconStyle: {
-  //   width: 15,
-  //   height: 15,
-  //   marginHorizontal: 5,
-  // },
-  // customItem: {
-  //   padding: 16,
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  // },
+  
 });
 
 export default CustomSidebarMenu;

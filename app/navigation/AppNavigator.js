@@ -16,12 +16,11 @@ const Tab = createBottomTabNavigator();
 const AppNavigator = () => {
   return (
     <Tab.Navigator
-     initialRouteName="Profile"
+     initialRouteName="Home"
     >
-    
-      <Tab.Screen
+    <Tab.Screen
         name="Home"
-        component={Home}
+        component={HomeScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
@@ -61,7 +60,7 @@ const AppNavigator = () => {
       />
        <Tab.Screen
         name="Profile"
-        component={HomeScreen}
+        component={Profile}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (

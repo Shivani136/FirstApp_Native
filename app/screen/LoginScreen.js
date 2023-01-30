@@ -64,7 +64,6 @@ const handleSubmit = async ({ username, password }) => {
           autoCapitalize="none"
           autoCorrect={false}
           icon="account"
-        //   keyboardType="email-address"
           name="username"
           placeholder="Username"
           textContentType="username"
@@ -74,6 +73,7 @@ const handleSubmit = async ({ username, password }) => {
           autoCorrect={false}
           icon="lock"
           name="password"
+          keyboardType="email-address"
           placeholder="Password"
           secureTextEntry={true}
          textContentType="password"

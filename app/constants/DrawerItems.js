@@ -1,31 +1,31 @@
 export default [
         {
-        name:'Edit Profile', //Profile
+        name:'Edit Profile', 
         iconType:'Material',
         iconName:'view-dashboard'
     },
     {
-        name:'Address', //Settings
+        name:'Address', 
         iconType:'FontAwesome',
          iconName:'address-card'
     },
     {
-        name:'Notifications', //Saved Items
+        name:'Notifications', 
         iconType:'FontAwesome5',
         iconName:'graduation-cap'
     },
     {
-        name:'Payment', //Settings
+        name:'Payment', 
         iconType:'FontAwesome',
          iconName:'address-card'
     },
     {
-        name:'Security', //Saved Items
+        name:'Security',
         iconType:'FontAwesome5',
         iconName:'graduation-cap'
     },
     {
-        name:'Language English(US)', //Refer a Friend!
+        name:'Language English(US)', 
         iconType:'FontAwesome5',
         iconName:'chalkboard-teacher'
     },

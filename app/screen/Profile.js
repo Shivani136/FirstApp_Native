@@ -1,15 +1,25 @@
 import React, { useState, useEffect ,useRef} from "react";
-import { Text,SafeAreaView, View,StyleSheet,StatusBar ,ScrollView,TouchableOpacity,Image, Alert} from 'react-native';
+import { Text,
+   SafeAreaView,
+   View,
+   StyleSheet,
+   StatusBar ,
+   ScrollView,
+   TouchableOpacity,
+   Image, 
+   Alert,
+   //DatePicker
+  } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import {  Button, Card} from 'react-native-paper';
+import { Button, Card } from 'react-native-paper';
 import {  TextInput, IconButton } from "@react-native-material/core";
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import colors from "../config/colors";
 import DatePicker from 'react-native-datepicker';
+//import DateTimePicker from '@react-native-community/datetimepicker';
 import SelectDropdown from 'react-native-select-dropdown';
 import DropDownPicker from 'react-native-dropdown-picker';
 import PhoneInput from 'react-native-phone-number-input';
-
 import {
   AppForm,
   AppFormField,
@@ -32,72 +42,79 @@ const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
   phone: Yup.string().required().min(10).label("Phone"),
   gender: Yup.string().required().label("Gender"),
-
 });
 
-export default function Profile({width='90%'}) {
-
+export default function Profile({width='90%', navigation}) {
   const [data, setData] = useState();
   const [list, setList] = useState([]);
   const [text, onChangeText] = useState('');
-  const [name, setName] = useState("");
-  const [first_name, setFirst_name] = useState("");
-  const [date, setDate] = useState('09-10-2021');
- const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [gender, setGender] = useState("");
+  const [name, setName] = useState('');
+  const [first_name, setFirst_name] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const phoneInput = useRef(null);
- 
+  const [date, setDate] = useState(new Date());
+  const [focusedInput, setFocus] = useState(null);
+  //console.log(date);
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState('');
   const [items, setItems] = useState([
     {label: 'Male', value: 'male'},
     {label: 'Female', value: 'female'}
   ]);
 
+ const phoneInput = useRef(null);
  const getPhoneNumber = () => {
-    Alert.alert(phoneNumber);
+    Alert.alert(phone);
   };
 
- const handleSubmit = async ({ name, first_name,date,email,phone,gender }) => {
-    // console.log(username,password)
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJmdXJuaXR1cmUiLCJpYXQiOjE2NzQ0NzUyNDgsImV4cCI6MTgzMjE1NTI0OH0.VsL3DEtjmZhKUwK83l4i1Q4cOKNBNkbtKTlDwGLOTX4'
+//const handleSubmit = async ({ name,first_name,email,date,phone,value }) => {
+  function Update() {
+ //console.log("result")
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJmdXJuaXR1cmUiLCJpYXQiOjE2NzQ0NzUyNDgsImV4cCI6MTgzMjE1NTI0OH0.VsL3DEtjmZhKUwK83l4i1Q4cOKNBNkbtKTlDwGLOTX4'
       let formData = new FormData();
-         
+      let acf = { 
+       phone: phone, gender: value, date: date
+      } 
+      let acfs= {
+        acf
+      }
+      console.log(acfs,'>>>>>>>>>>@@@@@@@@@@', name)
       formData.append('name', name); 
       formData.append('first_name', first_name);
       formData.append('email', email);
-      formData.append('date', acf[date]);  
-    
-      formData.append('phone', acf[phone]);   
-      formData.append('gender', acf[gender]);
-
-       const config = {     
+      formData.append('date', acf.date);  
+      formData.append('phone', acf.phone);   
+      formData.append('gender', acf.value);
+      const config = {     
         headers: {
           'Content-Type': 'application/json',
           'Authorization' : `Bearer ${token}` 
           }
       }
-      //console.log(formData,">>>>>>>>>>",username,password)
-    axios.post(`https://wpfurniture.mangoitsol.com/wp-json/wp/v2/users/5`,formData ,config)
-       .then(response => {
-           console.log(response.data, "sghths");
-          // navigation.navigate("Login")
-       })
-       .catch(error => {
-           console.log(error);
-       });
-     };
+      console.log(formData,">>>>>>>>>>",name,first_name,email,acf)
+    //  axios.post(`https://wpfurniture.mangoitsol.com/wp-json/wp/v2/users/5`,formData ,config)
+    //    .then(response => {
+    //     console.log(response.data, "??????????");
+    //       // navigation.navigate("Login")
+    //    })
+    //    .catch(error => {
+    //        console.log(error);
+    //    });
+      }
 
+      function handleChange(e){
+        console.log("MMMMM", e.target.name)
+      }
    return (
      <>
-      <KeyboardAwareScrollView>
+      {/* <KeyboardAwareScrollView> */}
       <SafeAreaView>
    
      <View style={{  backgroundColor: colors.white}}>
-     
+     {/* <Text style={{flex: 1,fontSize:20,padding:10, textAlign: "left", marginLeft: 30,fontWeight: "bold"}}>Fill Your Profile</Text> */}
      <View style={styles.container}>
+
       <Image source={require("../assets/user.png")} style={{position:'relative'}}/>
       <View  style={styles.camera}>
       <Entypo name="edit" size={16} color="white"/>
@@ -106,17 +123,20 @@ export default function Profile({width='90%'}) {
 
        <View style={{marginLeft:20}}>
       <AppForm 
-       //initialValues={{ username: "", password: "" }}
+       initialValues={{name: " ", first_name: " " ,date: "",email: " ", phone: "", value : ""}}
        style={[styles.form ,{width}]}
        validationSchema={validationSchema}
-       onSubmit={handleSubmit}
+      // onSubmit={handleSubmit}
+      //onSubmit={Update}
        >
         <AppTextInput 
          autoCapitalize="none"
-          autoCorrect={false}
+         autoCorrect={false}
          name="name"
-          // value={name}
-          // onChange={(e) => { setName(e.target.value) }}
+        // onChange={(e)=>handleChange(e)}
+       //  onChange={(e) => (name = e.target.value)}
+           value={name}
+           onChange={(e) => { setName(e.target.value) }}
           placeholder="Andrew Ainsley"
           textContentType="name"
          /> 
@@ -125,7 +145,7 @@ export default function Profile({width='90%'}) {
           autoCorrect={false}
           name="first_name"
           // value={first_name}
-          // onChange={(e) => { setFirst_name(e.target.value) }}
+           onChange={(e) => { setFirst_name(e.target.value) }}
           placeholder="Andrew"
           textContentType="first_name"
          /> 
@@ -149,28 +169,25 @@ export default function Profile({width='90%'}) {
       marginLeft: 0,
       },
       dateInput: {
-      
-        //borderColor : "gray",
+       //borderColor : "gray",
         alignItems: "flex-start",
         height:50,
         borderRadius:10,
         backgroundColor:colors.grayshade,
         //width:300
-      },
+         },
         placeholderText: {
         fontSize: 14,
-    
-      
-        },
-    dateText: {
+         },
+       dateText: {
        fontSize: 14,
        color: colors.black,
        margin:10,
-      
-      
-     }
+        }
      }}
- onDateChange={(date) => {setDate(date)}}/>
+    onDateChange={(date) => setDate(date)}
+ //onDateChange={(date) => {setDate(date)}}
+ />
 
 </View>
     <TextInput
@@ -180,38 +197,27 @@ export default function Profile({width='90%'}) {
      style={{margin:13, borderRadius:20 ,marginLeft:-2, backgroundColor:colors.grayshade,}}
      placeholder="andrew@yourdomain.com"
      textContentType="email"
+     keyboardType="email-address"
     //  value={email}
     //  onChange={(e) => { setEmail(e.target.value) }}
-    // variant="filled"
-     trailing={props => (
+    trailing={props => (
        <IconButton icon={props => <Icon name="email" {...props} />} {...props} />
      )}
    />
-        {/* <AppTextInput 
-         autoCapitalize="none"
-          autoCorrect={false}
-          name="email"
-          value={username}
-          onChange={(e) => { setUsername(e.target.value) }}
-          placeholder="andrew@yourdomain.com"
-          textContentType="username"
-         />  */}
-           {/* <PhoneInput ref='phone'/> */}
-
-        <PhoneInput
+     <PhoneInput
         ref={phoneInput}
-        defaultValue={phoneNumber}
+        defaultValue={phone}
         defaultCode="IN"
         layout="first"
         withShadow
         autoFocus
-        value={phoneNumber}
+        value={phone}
         placeholder="+1 1111467378399"
-      //  onChange={(e) => { setUsername(e.target.value) }}
+       // onChange={(e) => { setUsername(e.target.value) }}
         containerStyle={styles.phoneNumberView}
         textContainerStyle={{ paddingVertical: 0 }}
         onChangeFormattedText={text => {
-          setPhoneNumber(text);
+          setPhone(text);
         }}
       />
 
@@ -219,36 +225,27 @@ export default function Profile({width='90%'}) {
      <Text style={styles.buttonText}>Get Phone Number</Text>
       </TouchableOpacity> */}
 
-        {/* <AppTextInput 
-         autoCapitalize="none"
-          autoCorrect={false}
-          icon="phone"
-          name="phone no"
-          value={username}
-          onChange={(e) => { setUsername(e.target.value) }}
-          placeholder="+1 1111467378399"
-          textContentType="username"
-         />
-            */}
+       
          
 <View style={{ marginTop:20,marginBottom:15, margin:10}}> 
 <DropDownPicker
 style={{backgroundColor:colors.grayshade}}
       open={open}
       value={value}
-      items={items}
-      setOpen={setOpen}
-      setValue={setValue}
-      setItems={setItems}
-    />
+       items={items}
+       setOpen={setOpen}
+       setValue={setValue}
+       setItems={setItems}
+     
+     />
     </View>
    <View style={{paddingTop:5,}}>
 
-   <SubmitButton
-      title="Sign in"
+   {/* <SubmitButton
+      title="Continues"
       onPress={() => navigation.navigate("Login")}
-      />
-    {/* <AppButton title="Continue"></AppButton>    */}
+      /> */}
+    <AppButton onPress={()=>Update()} title="Update"></AppButton>   
     </View>
      </AppForm>
      
@@ -256,7 +253,7 @@ style={{backgroundColor:colors.grayshade}}
     </View>
     
     </SafeAreaView>
-    </KeyboardAwareScrollView>
+    {/* </KeyboardAwareScrollView> */}
     </>
        );
      }
